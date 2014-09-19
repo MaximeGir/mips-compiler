@@ -23,14 +23,3 @@ int valider_nombre_argument(int nombre_argument){
  }
  return 1; 
 }
-
-int valider_ouverture_fichier(char * nom_fichier){
- if(fopen(nom_fichier, "r") == NULL) 
- {
-  printf("Erreur : fichier non valide\n");
-  return 0;
- }
- return 1;
-}
-
-
