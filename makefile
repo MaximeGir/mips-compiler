@@ -8,12 +8,12 @@
 
 cc=gcc
 options=-W -Wall
-bin=mips_parser
-objets=argument.o parser.o writer.o mips_parser.o  
+bin=mips
+objets=argument.o parser.o writer.o mips.o  
 
 #cible : dépendance 
 
-mips_parser: $(objets)
+mips: $(objets)
 	$(cc) $(options) $(objets) -o $(bin)
 
 argument.o: argument.h argument.c
@@ -25,8 +25,8 @@ parser.o: parser.h parser.c
 writer.o: writer.h writer.c
 	$(cc) $(options) -c writer.c -o writer.o
 
-mips_parser.o: mips_parser.c
-	$(cc) $(options) -c mips_parser.c -o mips_parser.o
+mips.o: mips.c
+	$(cc) $(options) -c mips.c -o mips.o
 
 #cible : nettoyage
 	
