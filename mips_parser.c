@@ -13,13 +13,10 @@
 
 int main(int argc, char * args[]){
  FILE *fichier = fopen(args[1], "r");
- 
  //Validation 
  if(fichier == NULL) return EXIT_FAILURE;
  if(!valider_nombre_argument(argc)) return EXIT_FAILURE;
   
-  
-
   //Debug printf
   printf("working so far!\n");
   return EXIT_SUCCESS;

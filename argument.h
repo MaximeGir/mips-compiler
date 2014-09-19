@@ -9,6 +9,5 @@
 #define ARGUMENT_H
 
 int valider_nombre_argument(int nombre_argument);
-int valider_ouverture_fichier(char * nom_fichier);
 
 #endif
