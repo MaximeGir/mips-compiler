@@ -27,6 +27,12 @@ int valider_nombre_argument(int nombre_argument){
 
 int valider_nom_fichier(char *nom_fichier){
   char *extension = strrchr(nom_fichier, '.');
-  if(extension != NULL && !strcmp(extension, ".mips")) return 1;
-  else return 0;
+  if(extension != NULL && !strcmp(extension, ".mips")){
+	return 1;
+  }
+  else {
+      printf("Fichier invalide, l'extension devrait être '.mips'\n");
+      return 0;
+  }
+  
 }
