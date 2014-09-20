@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "argument.h"
 
 int valider_nombre_argument(int nombre_argument){
@@ -22,4 +23,10 @@ int valider_nombre_argument(int nombre_argument){
   return 0;
  }
  return 1; 
+}
+
+int valider_nom_fichier(char *nom_fichier){
+  char *extension = strrchr(nom_fichier, '.');
+  if(extension != NULL && !strcmp(extension, ".mips")) return 1;
+  else return 0;
 }
