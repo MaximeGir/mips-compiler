@@ -9,6 +9,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "parser.h"
+#include "writer.h"
+
+
 
  // Type d'instructions
  //

@@ -17,7 +17,10 @@ int main(int argc, char * args[]){
 	 printf("Fichier inexistant, réessayé avec un fichier valide.\n");
 	 return EXIT_FAILURE;
  }
+ 
  if(!valider_nom_fichier(args[1]) && !valider_nombre_argument(argc)) return EXIT_FAILURE;  
+ 
+ 
  
  // Type d'instructions
  //
