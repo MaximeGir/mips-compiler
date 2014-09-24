@@ -19,7 +19,8 @@ int main(int argc, char * args[]){
  }
  
  if(!valider_nom_fichier(args[1]) && !valider_nombre_argument(argc)) return EXIT_FAILURE;  
- 
+ getLigneBinaire(fichier); 
+
  
  
  // Type d'instructions

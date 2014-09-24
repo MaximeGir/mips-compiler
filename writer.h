@@ -8,4 +8,7 @@
 #ifndef WRITER_H
 #define WRITER_H
 
+char * genererNomFichier(char * nom_fichier);
+FILE * ouvrirFichierEcriture(char * nom_fichier);
+int ecrireLigne(char * ligne, FILE * fichier);
 #endif

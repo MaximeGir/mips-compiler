@@ -11,6 +11,15 @@
 #include "parser.h"
 #include "writer.h"
 
+char * getLigneBinaire(FILE * fichier){
+  char * ligneBinaire = malloc(32);
+  char line[256];
+  while(fgets(line, sizeof(line), fichier)){
+    //todo
+  }
+  return ligneBinaire;
+}
+
 //
 //for (Line line : fichier) 
 //- binaryLine = parseToBinary(line);
