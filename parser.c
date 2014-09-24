@@ -11,6 +11,11 @@
 #include "parser.h"
 #include "writer.h"
 
+//
+//for (Line line : fichier) 
+//- binaryLine = parseToBinary(line);
+//- writeLineInFile(binaryLine);
+//  
 
 
  // Type d'instructions
