@@ -14,13 +14,23 @@
 #include "writer.h"
 #include "dictionnaire.h"
 
+char * toBinary(uint32_t n){
+  size_t bits = sizeof(uint32_t) * 8;
+  char * str = malloc(bits + 1);
+  if(!str) return NULL;
+  str[bits] = 0;
+  for(; bits--; n >>= 1)
+    str[bits] = n & 1 ? '1' : '0';
+  return str;
+}
+
 void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
   uint32_t ligne_binaire = 0;
   char line[256];
   while(fgets(line, sizeof(line), fichier)){ 	
    char type = trouverTypeInstruction(line);
    ligne_binaire = conversionInstruction(line, type);
-   
+   printf("%s\n", toBinary(ligne_binaire));
   }
 }
 
@@ -38,9 +48,13 @@ char trouverTypeInstruction(char * ligne){
 }
 
 uint32_t conversionInstruction(char * ligne, char type){
+	uint32_t ligne_binaire = 0;
 	if(type == 'R'){
-       
+       setOpCodeBit('R', &ligne_binaire);
+       setOtherBit(ligne, &ligne_binaire);  
+       return ligne_binaire; 
 	}
+
 	if(type == 'I'){
 
 	}
@@ -50,53 +64,15 @@ uint32_t conversionInstruction(char * ligne, char type){
 	return 0;
 }
 
+void setOpCodeBit(char type, uint32_t *ligne_binaire){
+	if(type == 'R'){
+	  int i;
+      for(i = 0; i < 5; i++){
+        *ligne_binaire |= (0 << (31-5-i));
+	  }
+    }
+}
 
-
-//
-//for (Line line : fichier) 
-//- binaryLine = parseToBinary(line);
-//- writeLineInFile(binaryLine);
-//  
-
-
- // Type d'instructions
- //
- // R-Type:
- // add
- // addu
- // and
- // jr
- // nor
- // or
- // sll
- // slt
- // sltu
- // srl
- // sub
- // subu
- //
- // I-Type:
- // addi
- // addiu
- // andi
- // beq
- // bne
- // lb
- // lbu
- // lh
- // lhu
- // lui
- // lw
- // ori
- // sb
- // sh
- // slti
- // sltiu
- // sw
- //
- // J-Type:
- // j
- // jal
- //
-
-
+void setOtherBit(char * ligne, uint32_t * ligne_binaire){
+  printf("%d :: %s \n", *ligne_binaire, ligne);
+}

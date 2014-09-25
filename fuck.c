@@ -13,11 +13,19 @@ char * toBinary(uint32_t n){
   return str;
 }
 
+void bob(int * ass){
+	*ass += 3;
+}
+
 int main(){
 
+ //little endian
+ 
  uint32_t n = 0;
  uint32_t a = 2	;
+ 
  //printf("%s\n", toBinary(n));
+ 
  int i;
  for(i = 0; i < 6; i++){
    n |= (1 << 31-5-i);
@@ -26,7 +34,17 @@ int main(){
 
  FILE * fichier = fopen("hello.txt", "ab+");
  rewind(fichier);
- fwrite( &n, sizeof(uint32_t), 1, fichier );
+ //fwrite( &n, sizeof(uint32_t), 1, fichier );
+ int ass = 2;
+
+ bob(&ass);
+ printf("%d\n",ass);
+
+ 
+
  return 0;
+
+
 }
+
 
