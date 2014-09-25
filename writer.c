@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 #include "writer.h"
 
 char * genererNomFichier(char * nom_fichier){
@@ -21,8 +22,7 @@ FILE * ouvrirFichierEcriture(char * nom_fichier){
   return fichier;
 }
 
-int ecrireLigne(char * ligne, FILE * fichier){
-  fprintf(fichier, "%s", ligne);
-  fprintf(fichier, "\n");
+int ecrireLigne(uint32_t ligne, FILE * fichier){
+  fwrite( &ligne, sizeof(uint32_t), 1, fichier);
   return 0;
 }

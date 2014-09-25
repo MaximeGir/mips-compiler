@@ -14,13 +14,19 @@ char * toBinary(uint32_t n){
 }
 
 int main(){
+
  uint32_t n = 0;
- printf("%s\n", toBinary(n));
+ uint32_t a = 2	;
+ //printf("%s\n", toBinary(n));
  int i;
- for(i = 0; i < 5; i++){
-   n |= (1 << 31-i);
-   printf("%s\n", toBinary(n));
+ for(i = 0; i < 6; i++){
+   n |= (1 << 31-5-i);
+ //printf("%s\n", toBinary(n));
  }
+
+ FILE * fichier = fopen("hello.txt", "ab+");
+ rewind(fichier);
+ fwrite( &n, sizeof(uint32_t), 1, fichier );
  return 0;
 }
 

@@ -10,5 +10,5 @@
 
 char * genererNomFichier(char * nom_fichier);
 FILE * ouvrirFichierEcriture(char * nom_fichier);
-int ecrireLigne(char * ligne, FILE * fichier);
+int ecrireLigne(uint32_t ligne, FILE * fichier);
 #endif

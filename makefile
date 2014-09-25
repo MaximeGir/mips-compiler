@@ -7,15 +7,18 @@
 # variables
 
 cc=gcc
-options=-W -Wall
+options=-W -Wall -DDEBUG -g
 bin=mips
-objets=argument.o parser.o writer.o mips.o  
+objets=argument.o parser.o writer.o mips.o dictionnaire.o
 
 #cible : dépendance 
 
 mips: $(objets)
 	$(cc) $(options) $(objets) -o $(bin)
 
+dictionnaire.o: dictionnaire.h dictionnaire.c
+	$(cc) $(options) -c dictionnaire.c -o dictionnaire.o
+	
 argument.o: argument.h argument.c
 	$(cc) $(options) -c argument.c -o argument.o
 
@@ -40,4 +43,4 @@ clean:
 archive:
 	tar cvf tp1.tar *
 	gzip tp1.tar
-
+	
