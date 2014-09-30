@@ -9,5 +9,8 @@
  #define DICTIONNAIRE_H
 
 char dictionnaireType(char * mot);
+int dictionnaireOpCode(char * mot);
+int dictionnaireRegistre(char * mot);
+int dictionnaireFunction(char * mot);
 
 #endif

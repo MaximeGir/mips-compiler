@@ -9,10 +9,11 @@
 #define PARSER_H
 
 char * toBinary(uint32_t n);
+char * trouverNextMot(char * ligne);
 void parseLignesMips(FILE * fichier, FILE * fichier_ecriture);
-char trouverTypeInstruction(char * ligne);
+char * trouverMnemonic(char * ligne);
 uint32_t conversionInstruction(char * ligne, const char TYPE);
-void setOpCodeBit(char type, uint32_t *ligne_binaire);
+void setOpCodeBit(char * ligne, char type, uint32_t *ligne_binaire);
 void setOtherBit(char * ligne, uint32_t * ligne_binaire);  
 
 #endif
