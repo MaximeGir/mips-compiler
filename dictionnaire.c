@@ -31,6 +31,17 @@ char dictionnaireType(char * mot){
  else return 'J';
 }
 
+int dictionnaireValeurImmediate(char * mot){
+  if(!strcmp(mot, "lw") 
+    || !strcmp(mot, "lb") 
+    || !strcmp(mot, "lh") 
+    || !strcmp(mot, "sw") 
+    || !strcmp(mot, "sh") 
+    || !strcmp(mot, "sb"))
+  return 1;
+  return 0;
+}
+
 int dictionnaireOpCode(char * mot){
   if(!strcmp(mot, "addi")) return 0x08;
   if(!strcmp(mot, "andi")) return 0x0C;

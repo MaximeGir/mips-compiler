@@ -12,5 +12,6 @@ char dictionnaireType(char * mot);
 int dictionnaireOpCode(char * mot);
 int dictionnaireRegistre(char * mot);
 int dictionnaireFunction(char * mot);
+int dictionnaireValeurImmediate(char * mot);
 
 #endif

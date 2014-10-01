@@ -29,6 +29,7 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
   int rd;
   int rs;
   int rt;
+  int immediate;
   int opcode;
   int funct;
   int shamt;
@@ -36,55 +37,74 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
   char line[256];
 
   while(fgets(line, sizeof(line), fichier)){
-   //printf("Ligne entre dans parseLignesMips %sx \n",line);
-   
    char * mnemonic = trouverMnemonic(line);
-
-   //printf("mnemonic revenu de trouverMnemonic : %s\n", mnemonic);
-   //printf("Ligne apres avoir trovuer mnemonic %s\n", line);
    char * sline = strcpy(malloc(sizeof(line)), line+strlen(mnemonic));
-
    char type_instruction = dictionnaireType(mnemonic);
-   
-   //printf("sline apres avooir ete copier de ligne : %s\n", sline);
    
    if(type_instruction == 'R'){
      char * inst = strtok(sline," ,");
      rd = dictionnaireRegistre(inst);
-     //printf("premier token %s\n",inst);
 
      inst = strtok(NULL, ",");
      rs = dictionnaireRegistre(inst);
-     //printf("deuxieme token %s\n",inst);
 
      inst = strtok(NULL, "\n");
      rt = dictionnaireRegistre(inst); 
-     //printf("dernier token %s\n",inst);
 
      funct = dictionnaireFunction(mnemonic);
      opcode = 0;
      shamt = 0;
-
-     printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct);
-    
+     printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct); 
    }
 
   if(type_instruction == 'I'){
-     printf("type i\n");
-   }
 
+     int adresse_immediate = 0;
+     int * multi;
+
+     if(dictionnaireValeurImmediate(mnemonic)) adresse_immediate = 1; 
+     if(!adresse_immediate){
+      char * inst = strtok(sline," ,");
+      rt = dictionnaireRegistre(inst);
+      inst = strtok(NULL, ",");
+      rs = dictionnaireRegistre(inst); 
+      inst = strtok(NULL, "\n");
+      immediate = trouverValeurImmediate(inst, adresse_immediate, 0);
+      opcode = dictionnaireOpCode(mnemonic); 
+      printf("opcode %d | rs %d | rt %d | immediate %d\n", opcode, rt, rt, immediate);
+     } else {
+         char * inst = strtok(sline," ,");
+         rt = dictionnaireRegistre(inst);
+         inst = strtok(NULL, "\n");
+         int *multa = &multi; 
+         rs = trouverValeurImmediate(inst, adresse_immediate, multa);
+         opcode = dictionnaireOpCode(mnemonic); 
+         immediate = *multa;
+         printf("opcode %d | rs %d | rt %d | immediate %d\n", opcode, rs, rt, immediate);
+     }
+   }
   if(type_instruction == 'J'){
      printf("type j\n");
    }
    free(sline);
-
  }
+}
+
+int trouverValeurImmediate(char * mot, int adresse_immediate, int * multi ){
+  if(adresse_immediate == 1){
+    char * multiplicante = strtok(mot, "(");
+    *multi = atoi(multiplicante);
+    char * reste = strtok(NULL, ")");
+    return dictionnaireRegistre(reste);
+  } else {
+    int valeur_immediate = atoi(mot);
+    return valeur_immediate;
+  }
 }
 
 char * trouverMnemonic(char * ligne){
    char * ligneCopie = strcpy(malloc(sizeof(ligne)), ligne);
    char * mnemonic = strcpy(malloc(5),strtok(ligneCopie, " "));
-   //printf("ligne trouverMnemonic : %s, mnemonic : %s\n", ligne, mnemonic);
    return mnemonic;
 }
 
