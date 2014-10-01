@@ -25,7 +25,6 @@ char * toBinary(uint32_t n){
   return str;
 }
 
-
 void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
   int rd;
   int rs;
@@ -36,47 +35,57 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
   uint32_t ligne_binaire = 0;
   char line[256];
 
-  while(fgets(line, sizeof(line), fichier)){ 	
+  while(fgets(line, sizeof(line), fichier)){
+   //printf("Ligne entre dans parseLignesMips %sx \n",line);
    
    char * mnemonic = trouverMnemonic(line);
 
-   char * sline = strcpy(sline, line+strlen(mnemonic));
+   //printf("mnemonic revenu de trouverMnemonic : %s\n", mnemonic);
+   //printf("Ligne apres avoir trovuer mnemonic %s\n", line);
+   char * sline = strcpy(malloc(sizeof(line)), line+strlen(mnemonic));
+
    char type_instruction = dictionnaireType(mnemonic);
-   printf("line : %s\nsline %s\n", line, sline);
-  /* if(type_instruction == 'R'){
+   
+   //printf("sline apres avooir ete copier de ligne : %s\n", sline);
+   
+   if(type_instruction == 'R'){
      char * inst = strtok(sline," ,");
-     rd = dictionnaireRegistre(inst); inst = strtok(NULL, ",");
-     rs = dictionnaireRegistre(inst); inst = strtok(NULL, "\n");
+     rd = dictionnaireRegistre(inst);
+     //printf("premier token %s\n",inst);
+
+     inst = strtok(NULL, ",");
+     rs = dictionnaireRegistre(inst);
+     //printf("deuxieme token %s\n",inst);
+
+     inst = strtok(NULL, "\n");
      rt = dictionnaireRegistre(inst); 
+     //printf("dernier token %s\n",inst);
+
      funct = dictionnaireFunction(mnemonic);
      opcode = 0;
      shamt = 0;
 
      printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct);
-     
+    
    }
 
   if(type_instruction == 'I'){
-     printf("type i fuck");
+     printf("type i\n");
    }
 
   if(type_instruction == 'J'){
+     printf("type j\n");
+   }
+   free(sline);
 
-   }*/
  }
 }
 
 char * trouverMnemonic(char * ligne){
-  char * iterator = ligne;
-  char * mot = malloc(256);
-  char * depart_mot = mot;
-  
-  while(isspace(*iterator)) iterator++;
-  while(!isspace(*iterator)){
-    *mot = *(iterator++);
-    mot++;
-  }
-  return depart_mot;
+   char * ligneCopie = strcpy(malloc(sizeof(ligne)), ligne);
+   char * mnemonic = strcpy(malloc(5),strtok(ligneCopie, " "));
+   //printf("ligne trouverMnemonic : %s, mnemonic : %s\n", ligne, mnemonic);
+   return mnemonic;
 }
 
 uint32_t conversionInstruction(char * ligne, char type){
@@ -121,5 +130,5 @@ void setOpCodeBit(char * ligne, char type, uint32_t *ligne_binaire){
 }
 
 void setOtherBit(char * ligne, uint32_t * ligne_binaire){
-  //printf("%d :: %s \n", *ligne_binaire, ligne);
+  printf("%d :: %s \n", *ligne_binaire, ligne);
 }

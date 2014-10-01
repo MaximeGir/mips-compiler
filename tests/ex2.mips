@@ -5,4 +5,3 @@ or $s0,$s0,$s1
 ori $t1,$t2,16
 addi $s7,$s7,9
 add $v0,$t0,$t0
-
