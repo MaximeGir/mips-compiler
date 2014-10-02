@@ -15,16 +15,6 @@
 #include "writer.h"
 #include "dictionnaire.h"
 
-char * toBinary(uint32_t n){
-  size_t bits = sizeof(uint32_t) * 8;
-  char * str = malloc(bits + 1);
-  if(!str) return NULL;
-  str[bits] = 0;
-  for(; bits--; n >>= 1)
-    str[bits] = n & 1 ? '1' : '0';
-  return str;
-}
-
 void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
   int rd;
   int rs;
@@ -54,16 +44,13 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
      funct = dictionnaireFunction(mnemonic);
      opcode = 0;
      shamt = 0;
-     printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct); 
      ligne_binaire = conversionEnBinaire(type_instruction, opcode, rs, rt, rd, immediate, funct, shamt);
      ecrireLigne(ligne_binaire, fichier_ecriture);
-     printf("Fichier ecrit\n");
    }
 
   if(type_instruction == 'I'){
-
      int adresse_immediate = 0;
-     int * multi;
+     int multi;
 
      if(dictionnaireValeurImmediate(mnemonic)) adresse_immediate = 1; 
      if(!adresse_immediate){
@@ -74,22 +61,18 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
       inst = strtok(NULL, "\n");
       immediate = trouverValeurImmediate(inst, adresse_immediate, 0);
       opcode = dictionnaireOpCode(mnemonic); 
-      printf("opcode %d | rs %d | rt %d | immediate %d\n", opcode, rt, rt, immediate);
       ligne_binaire = conversionEnBinaire(type_instruction, opcode, rs, rt, rd, immediate, funct, shamt);
       ecrireLigne(ligne_binaire, fichier_ecriture);
-      printf("Fichier ecrit\n");
      } else {
          char * inst = strtok(sline," ,");
          rt = dictionnaireRegistre(inst);
          inst = strtok(NULL, "\n");
-         int *multa = &multi; 
-         rs = trouverValeurImmediate(inst, adresse_immediate, multa);
+          
+         rs = trouverValeurImmediate(inst, adresse_immediate, &multi);
          opcode = dictionnaireOpCode(mnemonic); 
-         immediate = *multa;
-         printf("opcode %d | rs %d | rt %d | immediate %d\n", opcode, rs, rt, immediate);
+         immediate = multi;
          ligne_binaire = conversionEnBinaire(type_instruction, opcode, rs, rt, rd, immediate, funct, shamt);
          ecrireLigne(ligne_binaire, fichier_ecriture);
-         printf("Fichier ecrit\n");
      }
    }
   
@@ -123,8 +106,6 @@ uint32_t conversionEnBinaire(char type, int opcode, int rs, int rt, int rd, int 
   int k;
   
   if(type == 'R'){
-    printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct);
-    
     //opcode sur 6 bits
     for(k = 6; k > 0; k--, opcode >>= 1){
      if(opcode & 1) ligne_binaire |= 1 << (32-k);
@@ -160,8 +141,6 @@ uint32_t conversionEnBinaire(char type, int opcode, int rs, int rt, int rd, int 
      if(funct & 1) ligne_binaire |= 1 << (6-k);
      else ligne_binaire |= 0 << (6-k);
     }
-
-    printf("binaire : %s\n", toBinary(ligne_binaire));
     return ligne_binaire; 
   }
   
@@ -186,7 +165,6 @@ uint32_t conversionEnBinaire(char type, int opcode, int rs, int rt, int rd, int 
      if(immediate & 1) ligne_binaire |= 1 << (16-k);
      else ligne_binaire |= 0 << (16-k);
     }
-    printf("binaire : %s\n", toBinary(ligne_binaire));
     return ligne_binaire; 
   }
   
