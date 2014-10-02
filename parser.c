@@ -33,7 +33,7 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
   int opcode;
   int funct;
   int shamt;
-  uint32_t ligne_binaire = 0;
+  int ligne_binaire = 0;
   char line[256];
 
   while(fgets(line, sizeof(line), fichier)){
@@ -56,6 +56,8 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
      shamt = 0;
      printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct); 
      ligne_binaire = conversionEnBinaire(type_instruction, opcode, rs, rt, rd, immediate, funct, shamt);
+     ecrireLigne(ligne_binaire, fichier_ecriture);
+     printf("Fichier ecrit\n");
    }
 
   if(type_instruction == 'I'){
@@ -73,6 +75,9 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
       immediate = trouverValeurImmediate(inst, adresse_immediate, 0);
       opcode = dictionnaireOpCode(mnemonic); 
       printf("opcode %d | rs %d | rt %d | immediate %d\n", opcode, rt, rt, immediate);
+      ligne_binaire = conversionEnBinaire(type_instruction, opcode, rs, rt, rd, immediate, funct, shamt);
+      ecrireLigne(ligne_binaire, fichier_ecriture);
+      printf("Fichier ecrit\n");
      } else {
          char * inst = strtok(sline," ,");
          rt = dictionnaireRegistre(inst);
@@ -82,13 +87,15 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
          opcode = dictionnaireOpCode(mnemonic); 
          immediate = *multa;
          printf("opcode %d | rs %d | rt %d | immediate %d\n", opcode, rs, rt, immediate);
+         ligne_binaire = conversionEnBinaire(type_instruction, opcode, rs, rt, rd, immediate, funct, shamt);
+         ecrireLigne(ligne_binaire, fichier_ecriture);
+         printf("Fichier ecrit\n");
      }
    }
   
   if(type_instruction == 'J'){
     //non-implémenté
   }
-
   free(sline);
  }
 }
@@ -112,14 +119,74 @@ char * trouverMnemonic(char * ligne){
 }
 
 uint32_t conversionEnBinaire(char type, int opcode, int rs, int rt, int rd, int immediate, int funct, int shamt){
-  
   uint32_t ligne_binaire = 0;
+  int k;
   
   if(type == 'R'){
-      return ligne_binaire; 
+    printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct);
+    
+    //opcode sur 6 bits
+    for(k = 6; k > 0; k--, opcode >>= 1){
+     if(opcode & 1) ligne_binaire |= 1 << (32-k);
+     else ligne_binaire |= 0 << (32-k);
+    }
+    
+    //rs sur 5 bits
+    for(k = 5; k > 0; k--, rs >>= 1){
+     if(rs & 1) ligne_binaire |= 1 << (26-k);
+     else ligne_binaire |= 0 << (26-k);
+    }    
+
+    //rt sur 5 bits
+    for(k = 5; k > 0; k--, rt >>= 1){
+     if(rt & 1) ligne_binaire |= 1 << (21-k);
+     else ligne_binaire |= 0 << (21-k);
+    } 
+
+    //rd sur 5 bits
+    for(k = 5; k > 0; k--, rd >>= 1){
+     if(rd & 1) ligne_binaire |= 1 << (16-k);
+     else ligne_binaire |= 0 << (16-k);
+    }   
+
+    //shamt sur 5 bits
+    for(k = 5; k > 0; k--, shamt >>= 1){
+     if(shamt & 1) ligne_binaire |= 1 << (11-k);
+     else ligne_binaire |= 0 << (11-k);
+    }   
+
+    //funct sur 6 bits
+    for(k = 6; k > 0; k--, funct >>= 1){
+     if(funct & 1) ligne_binaire |= 1 << (6-k);
+     else ligne_binaire |= 0 << (6-k);
+    }
+
+    printf("binaire : %s\n", toBinary(ligne_binaire));
+    return ligne_binaire; 
   }
   
   else if(type == 'I'){
+    //opcode sur 6 bits
+    for(k = 6; k > 0; k--, opcode >>= 1){
+     if(opcode & 1) ligne_binaire |= 1 << (32-k);
+     else ligne_binaire |= 0 << (32-k);
+    }
+    //rs sur 5 bits
+    for(k = 5; k > 0; k--, rs >>= 1){
+     if(rs & 1) ligne_binaire |= 1 << (26-k);
+     else ligne_binaire |= 0 << (26-k);
+    }
+    //rt sur 5 bits
+    for(k = 5; k > 0; k--, rt >>= 1){
+     if(rt & 1) ligne_binaire |= 1 << (21-k);
+     else ligne_binaire |= 0 << (21-k);
+    }
+    //immediate sur 6 bits
+    for(k = 16; k > 0; k--, immediate >>= 1){
+     if(immediate & 1) ligne_binaire |= 1 << (16-k);
+     else ligne_binaire |= 0 << (16-k);
+    }
+    printf("binaire : %s\n", toBinary(ligne_binaire));
     return ligne_binaire; 
   }
   
@@ -129,42 +196,4 @@ uint32_t conversionEnBinaire(char type, int opcode, int rs, int rt, int rd, int 
   }
   
   return -1;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void setOpCodeBit(char * ligne, char type, uint32_t *ligne_binaire){
-	if(type == 'R'){
-	  int i;
-      for(i = 0; i < 5; i++){
-        *ligne_binaire |= (0 << (31-5-i));
-	    }
-    }
-  if(type == 'I'){
-     
-  }
-
-  if(type == 'J'){
-
-  }
-}
-
-void setOtherBit(char * ligne, uint32_t * ligne_binaire){
-  printf("%d :: %s \n", *ligne_binaire, ligne);
 }

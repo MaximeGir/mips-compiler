@@ -93,7 +93,7 @@ int dictionnaireRegistre(char * mot){
 }
 
 int dictionnaireFunction(char * mot){
- if(!strcmp(mot, "add")) return 0x21;
+ if(!strcmp(mot, "add")) return 0x20;
  if(!strcmp(mot, "sub")) return 0x22;
  if(!strcmp(mot, "and")) return 0x24;
  if(!strcmp(mot, "or" )) return 0x25;
