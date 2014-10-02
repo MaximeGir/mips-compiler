@@ -13,7 +13,7 @@ char * trouverNextMot(char * ligne);
 void parseLignesMips(FILE * fichier, FILE * fichier_ecriture);
 int trouverValeurImmediate(char * mot, int adresse_immediate, int * valeur);
 char * trouverMnemonic(char * ligne);
-uint32_t conversionInstruction(char * ligne, const char TYPE);
+uint32_t conversionEnBinaire(char type, int opcode, int rs, int rt, int rd, int immediate, int funct);
 void setOpCodeBit(char * ligne, char type, uint32_t *ligne_binaire);
 void setOtherBit(char * ligne, uint32_t * ligne_binaire);  
 

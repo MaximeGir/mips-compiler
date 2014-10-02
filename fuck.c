@@ -34,7 +34,7 @@ int main(){
 
  FILE * fichier = fopen("hello.txt", "ab+");
  rewind(fichier);
- //fwrite( &n, sizeof(uint32_t), 1, fichier );
+ fwrite( &n, sizeof(uint32_t), 1, fichier );
  int ass = 2;
 
  bob(&ass);

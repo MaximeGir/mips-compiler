@@ -55,6 +55,7 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
      opcode = 0;
      shamt = 0;
      printf("opcode %d | rs %d | rt %d | rd %d | shamt | funct %d \n", opcode, rs, rt, rd, funct); 
+     ligne_binaire = conversionEnBinaire(type_instruction, opcode, rs, rt, rd, immediate, funct, shamt);
    }
 
   if(type_instruction == 'I'){
@@ -83,10 +84,12 @@ void parseLignesMips(FILE * fichier, FILE * fichier_ecriture){
          printf("opcode %d | rs %d | rt %d | immediate %d\n", opcode, rs, rt, immediate);
      }
    }
+  
   if(type_instruction == 'J'){
-     printf("type j\n");
-   }
-   free(sline);
+    //non-implémenté
+  }
+
+  free(sline);
  }
 }
 
@@ -108,11 +111,24 @@ char * trouverMnemonic(char * ligne){
    return mnemonic;
 }
 
-uint32_t conversionInstruction(char * ligne, char type){
-	uint32_t ligne_binaire = 0;
-  setOpCodeBit(ligne, type, &ligne_binaire);
-  setOtherBit(ligne, &ligne_binaire);  
-  return ligne_binaire; 
+uint32_t conversionEnBinaire(char type, int opcode, int rs, int rt, int rd, int immediate, int funct, int shamt){
+  
+  uint32_t ligne_binaire = 0;
+  
+  if(type == 'R'){
+      return ligne_binaire; 
+  }
+  
+  else if(type == 'I'){
+    return ligne_binaire; 
+  }
+  
+  else if(type == 'J'){ 
+    //non implémenté
+    return ligne_binaire; 
+  }
+  
+  return -1;
 }
 
 
